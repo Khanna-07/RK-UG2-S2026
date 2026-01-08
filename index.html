@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Attendance">
+    <meta name="theme-color" content="#002366">
+      
+    <title>RahulKhanna UG-2 Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+  }
+</script>
+
+<body>
+<header class="top">
+    <h1>RahulKhanna's UG-2</h1>
+    <p>Spring 2026 · Attendance Tracker</p>
+</header>
+
+<main id="dashboard">
+    <section class="day-card">
+        <h2>Monday</h2>
+        <div class="slot acs" onclick="openAttendance('ACS4')"><span>08:45–09:45 · ACS4</span><span class="room-tag">G06</span></div>
+        <div class="slot ccn" onclick="openAttendance('CCN4')"><span>11:00–12:00 · CCN4</span><span class="room-tag">G05</span></div>
+        <div class="slot emtl" onclick="openAttendance('EMTL')"><span>12:00–01:00 · EMTL</span><span class="room-tag">B03</span></div>
+        <div class="slot fcomm-lab" onclick="openAttendance('FCOMM Lab')"><span>02:15–04:15 · FCOMM Lab</span><span class="room-tag">114</span></div>
+        <button class="day-open" onclick="openDayView(1)">Mark Today</button>
+    </section>
+
+    <section class="day-card">
+        <h2>Tuesday</h2>
+        <div class="slot ac" onclick="openAttendance('AC')"><span>08:45–09:45 · AC</span><span class="room-tag">G05</span></div>
+        <div class="slot ccn" onclick="openAttendance('CCN4')"><span>09:45–10:45 · CCN4</span><span class="room-tag">G04</span></div>
+        <div class="slot emtl" onclick="openAttendance('EMTL')"><span>02:15–03:15 · EMTL</span><span class="room-tag">G06</span></div>
+        <div class="slot ac" onclick="openAttendance('AC')"><span>03:15–04:15 · AC</span><span class="room-tag">G05</span></div>
+        <div class="slot fcomm" onclick="openAttendance('FCOMM')"><span>04:30–05:30 · FCOMM</span><span class="room-tag">G06</span></div>
+        <button class="day-open" onclick="openDayView(2)">Mark Today</button>
+    </section>
+
+    <section class="day-card">
+        <h2>Wednesday</h2>
+        <div class="slot acs" onclick="openAttendance('ACS4')"><span>08:45–09:45 · ACS4</span><span class="room-tag">B03</span></div>
+        <div class="slot emtl" onclick="openAttendance('EMTL')"><span>09:45–10:45 · EMTL</span><span class="room-tag">G06</span></div>
+        <div class="slot ac-lab" onclick="openAttendance('AC Lab')"><span>11:00–01:00 · AC Lab</span><span class="room-tag">112</span></div>
+        <button class="day-open" onclick="openDayView(3)">Mark Today</button>
+    </section>
+
+    <section class="day-card">
+        <h2>Thursday</h2>
+        <div class="slot lr" onclick="openAttendance('LR4')"><span>08:45–10:45 · LR4</span><span class="room-tag">G05</span></div>
+        <div class="slot fcomm" onclick="openAttendance('FCOMM')"><span>11:00–12:00 · FCOMM</span><span class="room-tag">G06</span></div>
+        <div class="slot ccn" onclick="openAttendance('CCN4')"><span>02:15–03:15 · CCN4</span><span class="room-tag">G06</span></div>
+        <div class="slot emtl" onclick="openAttendance('EMTL')"><span>03:15–04:15 · EMTL</span><span class="room-tag">G06</span></div>
+        <button class="day-open" onclick="openDayView(4)">Mark Today</button>
+    </section>
+
+    <section class="day-card">
+        <h2>Friday</h2>
+        <div class="slot ac" onclick="openAttendance('AC')"><span>11:00–12:00 · AC</span><span class="room-tag">G06</span></div>
+        <div class="slot fcomm" onclick="openAttendance('FCOMM')"><span>12:00–01:00 · FCOMM</span><span class="room-tag">G07</span></div>
+        <div class="slot ccn" onclick="openAttendance('CCN4')"><span>03:15–04:15 · CCN4</span><span class="room-tag">G06</span></div>
+        <button class="day-open" onclick="openDayView(5)">Mark Today</button>
+    </section>
+
+    <section class="day-card" style="margin-bottom: 40px; background: rgba(0,0,0,0.4);">
+        <h2 style="color: #ffffff; opacity: 0.9; margin-bottom: 15px;">Overall Subject Attendance</h2>
+        <div id="global-breakdown"></div>
+    </section>
+</main>
+
+<div id="attendanceModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="calendar-header">
+            <button onclick="prevMonth()">‹</button>
+            <span id="monthLabel"></span>
+            <button onclick="nextMonth()">›</button>
+        </div>
+        <h3 id="modalTitle" style="text-align:center; margin: 10px 0; font-weight: 800;"></h3>
+        <div id="calendar" class="calendar-grid"></div>
+        <div id="summary"></div>
+        <div class="footer-btns">
+            <div style="display: flex; gap: 8px;">
+                <button class="present" style="flex:1" onclick="markStatus('present')">Present</button>
+                <button class="absent" style="flex:1" onclick="markStatus('absent')">Absent</button>
+            </div>
+            <button class="cancel-btn" onclick="markStatus('cancelled')">Cancel Class</button>
+            <button class="reset" onclick="clearAllMarks()">Reset Data</button>
+            <button class="close" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<div id="dayModal" class="modal hidden">
+    <div class="modal-content">
+        <h3 style="text-align:center; margin-bottom:15px; font-weight: 800;">Today's Classes</h3>
+        <div id="dayTimeline"></div>
+        <div id="lockActionArea"></div>
+        <button class="close" onclick="closeDayModal()">Close</button>
+    </div>
+</div>
+
+<script src="attendance.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
