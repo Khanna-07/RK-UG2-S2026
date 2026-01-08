@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,14 +9,11 @@
     <meta name="theme-color" content="#002366">
       
     <title>RahulKhanna UG-2 Tracker</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<script>
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-  }
-</script>
+    
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="/RK-UG2-S2026/manifest.json">
 
+</head>
 <body>
 <header class="top">
     <h1>RahulKhanna's UG-2</h1>
@@ -108,5 +104,11 @@
 
 <script src="attendance.js"></script>
 <script src="script.js"></script>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/RK-UG2-S2026/sw.js");
+  }
+</script>
+
 </body>
 </html>
